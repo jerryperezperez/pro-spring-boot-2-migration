@@ -38,11 +38,10 @@
 <!--        Para solucionar el error, agrega la siguiente dependencia en tu pom.xml para incluir el broker embebido:-->
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-broker</artifactId>
-            <version>5.18.2</version>
+            <artifactId>artemis-jakarta-server</artifactId>
+             <version>2.31.2</version>
         </dependency>
-
-<!--    TODO    error ClassNotFoundException: org.apache.activemq.store.kahadb.KahaDBPersistenceAdapter indica que falta la clase de persistencia KahaDB en el classpath. Esto ocurre porque la dependencia necesaria no está incluida en tu proyecto.-->
+ <!--    TODO    error ClassNotFoundException: org.apache.activemq.store.kahadb.KahaDBPersistenceAdapter indica que falta la clase de persistencia KahaDB en el classpath. Esto ocurre porque la dependencia necesaria no está incluida en tu proyecto.-->
 
         <dependency>
             <groupId>org.apache.activemq</groupId>
@@ -99,6 +98,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
     </dependencies>
 
     <build>

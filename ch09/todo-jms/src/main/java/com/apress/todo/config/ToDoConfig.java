@@ -1,5 +1,6 @@
 package com.apress.todo.config;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,7 @@ import org.springframework.jms.annotation.JmsListenerConfigurer;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerEndpointRegistrar;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 import org.springframework.jms.support.converter.MessageConverter;
@@ -29,6 +31,13 @@ public class ToDoConfig {
         
     }
     
+    @Bean
+    public JmsTemplate jmsTemplate(ConnectionFactory jmsConnectionFactory,MessageConverter jacksonJmsMessageConverter) {
+    	JmsTemplate template = new JmsTemplate(jmsConnectionFactory);
+        template.setMessageConverter(jacksonJmsMessageConverter);
+        return template;
+    }
+    
     // The Qualifer annotation is added to indicate to Spring which specific bean needs to autowire
     @Bean
     public JmsListenerContainerFactory<?> jmsFactory(@Qualifier("jmsConnectionFactory") ConnectionFactory connectionFactory, DefaultJmsListenerContainerFactoryConfigurer configurer) {
@@ -37,6 +46,12 @@ public class ToDoConfig {
         configurer.configure(factory, connectionFactory);
         return factory;
     }
+    
+    @Bean
+    public ConnectionFactory jmsConnectionFactory() {
+        return new ActiveMQConnectionFactory("vm://localhost?broker.persistent=false");
+    }
+   
     
     @Configuration
     static class MethodListenerConfig implements JmsListenerConfigurer {
@@ -54,5 +69,6 @@ public class ToDoConfig {
         
         
     }
+   
     
 }
